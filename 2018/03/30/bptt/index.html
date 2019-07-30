@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="python,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Kommmy Blog" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="1.概要本文来自博客 A Neural Network in 13 lines of Python这篇博客只用了13行代码就实现了Python版本的反向传播，虽然有很多文章都对它进行了翻译，但在最关键反向传播部分，并没有给出详细公式，下面就对代码中的反向传播进行重点介绍。 2.全部反向传播代码下面是13行完整代码1234567891011121314import numpy as npX = np">
+<meta name="keywords" content="python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手写Python反向传播">
+<meta property="og:url" content="https://kommmy.github.io/2018/03/30/bptt/index.html">
+<meta property="og:site_name" content="Kommmy Blog">
+<meta property="og:description" content="1.概要本文来自博客 A Neural Network in 13 lines of Python这篇博客只用了13行代码就实现了Python版本的反向传播，虽然有很多文章都对它进行了翻译，但在最关键反向传播部分，并没有给出详细公式，下面就对代码中的反向传播进行重点介绍。 2.全部反向传播代码下面是13行完整代码1234567891011121314import numpy as npX = np">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-25T08:38:02.808Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="手写Python反向传播">
+<meta name="twitter:description" content="1.概要本文来自博客 A Neural Network in 13 lines of Python这篇博客只用了13行代码就实现了Python版本的反向传播，虽然有很多文章都对它进行了翻译，但在最关键反向传播部分，并没有给出详细公式，下面就对代码中的反向传播进行重点介绍。 2.全部反向传播代码下面是13行完整代码1234567891011121314import numpy as npX = np">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://kommmy.github.io/2018/03/30/bptt/">
+
+
+
+
+
+  <title>手写Python反向传播 | Kommmy Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Kommmy Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://kommmy.github.io/2018/03/30/bptt/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Kommmy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/0.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Kommmy Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">手写Python反向传播</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-30T14:56:13+08:00">
+                2018-03-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-概要"><a href="#1-概要" class="headerlink" title="1.概要"></a>1.概要</h2><p>本文来自博客 <a href="http://iamtrask.github.io/2015/07/27/python-network-part2/" target="_blank" rel="noopener">A Neural Network in 13 lines of Python</a><br>这篇博客只用了13行代码就实现了Python版本的反向传播，虽然有很多文章都对它进行了翻译，但在最关键反向传播部分，并没有给出详细公式，下面就对代码中的反向传播进行重点介绍。</p>
+<h2 id="2-全部反向传播代码"><a href="#2-全部反向传播代码" class="headerlink" title="2.全部反向传播代码"></a>2.全部反向传播代码</h2><p>下面是13行完整代码<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">X = np.array([ [<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>],[<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span>],[<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>],[<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>] ])</span><br><span class="line">y = np.array([[<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>]]).T</span><br><span class="line">lr,hidden_dim = (<span class="number">0.5</span>,<span class="number">4</span>)</span><br><span class="line">w0 = <span class="number">2</span>*np.random.random((<span class="number">3</span>,hidden_dim)) - <span class="number">1</span></span><br><span class="line">w1 = <span class="number">2</span>*np.random.random((hidden_dim,<span class="number">1</span>)) - <span class="number">1</span></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">60000</span>):</span><br><span class="line">    layer1 = <span class="number">1</span>/(<span class="number">1</span>+np.exp(-(np.dot(X,w0))))</span><br><span class="line">    layer2 = <span class="number">1</span>/(<span class="number">1</span>+np.exp(-(np.dot(layer1,w1))))</span><br><span class="line">    layer2_delta = (layer2 - y)*(layer2*(<span class="number">1</span>-layer2))</span><br><span class="line">    layer1_delta = layer2_delta.dot(w1.T) * (layer1 * (<span class="number">1</span>-layer1))</span><br><span class="line">    w1 -= (lr * layer1.T.dot(layer2_delta))</span><br><span class="line">    w0 -= (lr * X.T.dot(layer1_delta))</span><br><span class="line">print(layer2)</span><br></pre></td></tr></table></figure></p>
+<h2 id="3-关键行解释"><a href="#3-关键行解释" class="headerlink" title="3.关键行解释"></a>3.关键行解释</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">变量</th>
+<th style="text-align:left">定义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">X</td>
+<td style="text-align:left">输入数据矩阵，每行是一个训练样例</td>
+</tr>
+<tr>
+<td style="text-align:left">y</td>
+<td style="text-align:left">输出数据矩阵，每行是一个训练样例</td>
+</tr>
+<tr>
+<td style="text-align:left">layer1</td>
+<td style="text-align:left">神经网络的隐含层，输入来自X</td>
+</tr>
+<tr>
+<td style="text-align:left">layer2</td>
+<td style="text-align:left">神经网络的输出层，输入来自layer1</td>
+</tr>
+<tr>
+<td style="text-align:left">w1</td>
+<td style="text-align:left">输出层权重，连接layer1与layer2</td>
+</tr>
+<tr>
+<td style="text-align:left">w0</td>
+<td style="text-align:left">隐含层权重，连接X与layer1</td>
+</tr>
+</tbody>
+</table>
+<p><strong>line1-6:</strong> 前6行都是在定义初始化参数，学习率和权重矩阵等等，这些应该很好理解。<br><strong>line8-9:</strong> 这两行是在进行前向传播，激活函数为sigmoid。<br><strong>line10-13:</strong> 这四行是在进行反向传播，下面来说说代码为什么这么写<br><a id="more"></a><br>首先整体误差:</p>
+<p>$E_{total}=\frac{1}{2}(y-out)^2 $</p>
+<p>先计算输出层权重矩阵w1，如果我们想知道w1对整体误差产生了多少影响，可以用整体误差对w1求偏导求出：（链式法则）</p>
+<p>$\frac{dE}{dw_1} = \frac{dE}{dout}\ast\frac{dout}{dnet_o}\ast\frac{dnet_o}{dw_1}$</p>
+<p>分别计算上面的每一项</p>
+<p>$\frac{dE}{dout} = -(y-out)$</p>
+<p>$\frac{dout}{dnet_o} = out(1-out)$   这一项就是sigmoid的导数</p>
+<p>$\frac{dnet_o}{dw_1}=out_h$ 这一项就是隐含层的输出结果</p>
+<p>为了表达方便，$\delta_o$用来表示输出层的误差:</p>
+<p>$\delta=\frac{dE}{dout}*\frac{dout}{dnet_o}=\frac{dE}{dnet_o}$</p>
+<p>最终的结果可以简化为</p>
+<p>$\frac{dE}{dw_1}=\delta_o*out_h$</p>
+<p>最后我们来更新w1的值:</p>
+<p>$w_1 =w_1-\eta\ast\frac{dE}{dw_1} $</p>
+<p>现在让我们回过头来看看代码<br>layer2_delta = (layer2 - y)* (layer2*(1-layer2))<br>layer2_delta正是在计算$\delta_0$<br>w1 -= (lr * layer1.T.dot(layer2_delta))<br>w1正是在计算$\delta_o\ast out_h$ 然后乘以学习率，在更新到原有的w1上</p>
+<p>下面我们再来看看隐含层权重矩阵w0的更新情况</p>
+<p>$\frac{dE}{dw_0} = \frac{dE}{dout_h}\ast\frac{dout_h}{dnet_h}\ast\frac{dnet_h}{dw_0}$</p>
+<p>总共有三项，我们先计算第一项，将第一项展开</p>
+<p>$\frac{dE}{dout_h}=\frac{dE}{dnet_o}\ast\frac{dnet_o}{dout_h}$</p>
+<p>再展开$\frac{dE}{dnet_o}$</p>
+<p>$\frac{dE}{dnet_o}=\frac{dE}{dout}\ast\frac{dout}{dnet_o}$</p>
+<p>仔细看这两项的已经在上面计算输出层权重偏导的时候计算过了</p>
+<p>然后我们又知道</p>
+<p>$\frac{dnet_o}{dout_h}=w_1$</p>
+<p>所以$\frac{dE}{dout_h}$ 这一项已经计算完成，还剩后面两项</p>
+<p>$\frac{dout_h}{dnet_h}=out_h\ast(1-out_h)$ 这一项依旧是sigmoid的导数</p>
+<p>最后还剩$\frac{dnet_h}{dw_0}$</p>
+<p>$\frac{dnet_h}{dw_0}=X$ 这一项就是输入X</p>
+<p>最后我们将3项相乘,可以得到结果<br>为了简化公式，用$\delta_h$表示隐含层单元的误差：<br>化简公式如下</p>
+<p>$\frac{dE}{dw_0}=\delta_o*w_1\ast out_h(1-out_h)\ast X$</p>
+<p>$\frac{dE}{dw_0}=\delta_h\ast X$</p>
+<p>$w_0 =w_0-\eta\ast\frac{dE}{dw_0} $</p>
+<p>现在我们再回到代码，看看更新w0的部分<br>layer1_delta = layer2_delta.dot(w1.T) <em> (layer1 </em> (1-layer1))<br>w0 -= (lr * X.T.dot(layer1_delta))<br>layer1_delta正是在计算$\delta_h$<br>最终再乘以学习率，完成对隐含层权重w0的更新</p>
+<p>以上就是全部的反向传播计算过程。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/22/djangoconf/" rel="next" title="django.conf.settings的注意事项">
+                <i class="fa fa-chevron-left"></i> django.conf.settings的注意事项
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/11/gan-vae/" rel="prev" title="Pytorch入门之VAE">
+                Pytorch入门之VAE <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/0.png" alt="Kommmy">
+            
+              <p class="site-author-name" itemprop="name">Kommmy</p>
+              <p class="site-description motion-element" itemprop="description">记录踩过的坑</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/kommmy" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-概要"><span class="nav-number">1.</span> <span class="nav-text">1.概要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-全部反向传播代码"><span class="nav-number">2.</span> <span class="nav-text">2.全部反向传播代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-关键行解释"><span class="nav-number">3.</span> <span class="nav-text">3.关键行解释</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Kommmy</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  <div class="theme-info">
+  总访问量<span><span id="busuanzi_value_site_pv"></span>
+</span></div>
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>

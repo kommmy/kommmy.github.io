@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+
+    
+  <url>
+    <loc>https://kommmy.github.io/2018/10/23/separation/</loc>
+    <lastmod>2019-02-12T09:02:40.638Z</lastmod>
+    <data>
+        <display>
+        <title>浅谈django项目中前后端分离csrf传递</title>
+        <pubTime>2018-10-23T08:09:43.000Z</pubTime>
+        
+        <tag>python</tag>
+         
+         
+           
+             
+              <breadCrumb title="编程" url="https://kommmy.github.io/categories/programming/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://kommmy.github.io/2018/05/25/async/</loc>
+    <lastmod>2018-05-25T09:18:29.867Z</lastmod>
+    <data>
+        <display>
+        <title>快速了解Python中的协程</title>
+        <pubTime>2018-05-25T08:09:43.000Z</pubTime>
+        
+        <tag>python</tag>
+         
+         
+           
+             
+              <breadCrumb title="编程" url="https://kommmy.github.io/categories/programming/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://kommmy.github.io/2018/04/25/pytorch/</loc>
+    <lastmod>2018-04-25T08:45:02.532Z</lastmod>
+    <data>
+        <display>
+        <title>Pytorch终于支持Windows</title>
+        <pubTime>2018-04-25T08:39:52.000Z</pubTime>
+        
+        <tag>python</tag>
+         
+         
+           
+             
+              <breadCrumb title="其他" url="https://kommmy.github.io/categories/other/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://kommmy.github.io/2018/03/30/bptt/</loc>
+    <lastmod>2018-04-25T08:38:02.808Z</lastmod>
+    <data>
+        <display>
+        <title>手写Python反向传播</title>
+        <pubTime>2018-03-30T06:56:13.000Z</pubTime>
+        
+        <tag>python</tag>
+         
+         
+           
+             
+              <breadCrumb title="算法" url="https://kommmy.github.io/categories/%E7%AE%97%E6%B3%95/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://kommmy.github.io/2018/04/11/gan-vae/</loc>
+    <lastmod>2018-04-11T09:12:09.838Z</lastmod>
+    <data>
+        <display>
+        <title>Pytorch入门之VAE</title>
+        <pubTime>2018-04-11T03:37:06.000Z</pubTime>
+        
+        <tag>python</tag>
+         
+        <tag>pytorch</tag>
+         
+         
+           
+             
+              <breadCrumb title="算法" url="https://kommmy.github.io/categories/%E7%AE%97%E6%B3%95/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://kommmy.github.io/2018/03/22/djangoconf/</loc>
+    <lastmod>2018-03-22T10:18:05.603Z</lastmod>
+    <data>
+        <display>
+        <title>django.conf.settings的注意事项</title>
+        <pubTime>2018-03-22T10:01:46.000Z</pubTime>
+        
+        <tag>python</tag>
+         
+         
+           
+             
+              <breadCrumb title="编程" url="https://kommmy.github.io/categories/programming/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://kommmy.github.io/2018/03/08/metaclass/</loc>
+    <lastmod>2018-03-08T07:44:54.596Z</lastmod>
+    <data>
+        <display>
+        <title>小结Python中的元类Metaclass</title>
+        <pubTime>2018-03-08T07:16:17.000Z</pubTime>
+        
+        <tag>python</tag>
+         
+         
+           
+             
+              <breadCrumb title="编程" url="https://kommmy.github.io/categories/programming/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://kommmy.github.io/2018/02/27/new/</loc>
+    <lastmod>2018-03-08T07:42:09.972Z</lastmod>
+    <data>
+        <display>
+        <title>浅谈python2到python3的区别</title>
+        <pubTime>2018-02-27T07:36:09.000Z</pubTime>
+        
+        <tag>python</tag>
+         
+         
+           
+             
+              <breadCrumb title="编程" url="https://kommmy.github.io/categories/programming/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+    
+  <url>
+    <loc>https://kommmy.github.io/2018/02/11/page/</loc>
+    <lastmod>2018-02-11T07:59:23.896Z</lastmod>
+    <data>
+        <display>
+        <title>解决django日志多进程写入混乱的问题</title>
+        <pubTime>2018-02-11T03:37:32.000Z</pubTime>
+        
+        <tag>python</tag>
+         
+        <tag>django</tag>
+         
+         
+           
+             
+              <breadCrumb title="编程" url="https://kommmy.github.io/categories/programming/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+    
+</urlset>
